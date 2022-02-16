@@ -97,6 +97,7 @@
 
   window.onload = function () {
     let query = window.location.search.slice(3);
+    query.replace('%20',' ');
     let params = query.split('+');
     for (let i = params.length; i >= 0; i--) {
       if (params[i] == '') params.splice(i, 1);
