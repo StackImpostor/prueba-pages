@@ -1,1 +1,143 @@
-<h1>Hello World</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscador</title>
+</head>
+
+<body>
+  <form action="custombrowser.html" method="get">
+    <input type="text" name="q" id="">
+    <input type="submit" value="Test">
+  </form>
+  <p id="display"></p>
+</body>
+<script>
+  let comandos = [
+    /*
+    {
+      "nombres": ['nombre1','nombre2'],
+      "callback": function (comando, params) {
+        //// Codigo aquí ////
+      }
+    }
+    */
+    {
+      "nombres": ['buscacarta', 'bc'],
+      "callback": function (comando, params) {
+        let id = params[0];
+        let sifas = false;
+        if (id.charAt(0) == 's') {
+          sifas = true;
+          id = id.slice(1);
+        }
+        if (id.charAt(0) == 'i') {
+          id = id.slice(1);
+        }
+        if (!isNaN(id)) {
+          let url;
+          if (sifas) {
+            url = `https://idol.st/allstars/card/${id}/`;
+          } else {
+            url = `https://schoolido.lu/cards/${id}/`;
+          }
+          redirigir(url);
+        }
+      }
+    },
+    {
+      "nombres": ['rae', 'define'],
+      "callback": function (comando, params) {
+        let url = `https://dle.rae.es/${combinar(params)}`;
+        redirigir(url);
+      }
+    },
+    {
+      "nombres": ['mwiki', 'minecraft'],
+      "callback": function (comando, params) {
+        if(params[0] == 'wiki') params.shift();
+        let url = `https://minecraft.fandom.com/wiki/${combinar(params,'_')}`;
+        redirigir(url);
+      }
+    },
+    {
+      "nombres": ['wordle', 'nerdle'],
+      "callback": function (comando, params) {
+        let url;
+        if(comando == 'nerdle') 
+          url = 'https://nerdlegame.com/';
+        else if(params.length > 0 && ['en','eng','english','ingles','inglés'].includes(params[0]))
+          url = 'https://www.nytimes.com/games/wordle/index.html';
+        else 
+          url = 'https://wordle.danielfrg.com/';
+        redirigir(url);
+      }
+    },
+    {
+      "nombres": ['redeem'],
+      "callback": function (comando, params) {
+        let url = `https://genshin.hoyoverse.com/en/gift`;
+        redirigir(url);
+      }
+    },
+    {
+      "nombres": ['bing'],
+      "callback": function (comando, params) {
+        let url = `https://bing.com/`;
+        if(params.length > 0){
+          url += `search?q=${combinar(params)}`;
+        }
+        redirigir(url);
+      }
+    }
+  ];
+
+  window.onload = function () {
+    let query = window.location.search.slice(3);
+    let params = query.split('+');
+    for (let i = params.length; i >= 0; i--) {
+      if (params[i] == '') params.splice(i, 1);
+    }
+    console.log(params)
+    if (params.length > 0) {
+      let comando = params.shift().toLowerCase();
+
+      let found = false;
+      for (let i = 0; i < comandos.length; i++) {
+        if (comandos[i].nombres.includes(comando)) {
+          comandos[i].callback(comando, params);
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        let search = `https://www.google.es/search?q=${query}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:iOSSearchLanguage}{google:prefetchSource}{google:searchClient}{google:sourceId}{google:contextualSearchVersion}ie={inputEncoding}`;
+        redirigir(search)
+      }
+    }
+  }
+
+  function redirigir(url) {
+    window.location.replace(url);
+  }
+
+  function nuevaPestaña(url) {
+    window.open(url, "_blank");
+  }
+
+  function combinar(params, conector = '+'){
+    let cadena = "";
+    for (let i = 0; i < params.length; i++){
+      cadena += params[i];
+      if (i < params.length - 1) cadena += conector;
+    }
+    return cadena;
+  }
+
+
+</script>
+
+</html>
