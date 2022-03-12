@@ -104,7 +104,7 @@
        */
       function listFiles() {
         gapi.client.drive.files.list({
-          'pageSize': 10,
+          'pageSize': 100,
           'fields': "nextPageToken, files(id, name)"
         }).then(function(response) {
           appendPre('Files:');
