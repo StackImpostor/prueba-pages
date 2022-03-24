@@ -42,12 +42,37 @@
     */
     {
       "nombres": ['home', 'index'],
+      "descipción": "Te lleva a la pagina principal del buscador",
       "callback": function (comando, params) {
         window.location.search = '';
       }
     },
     {
+      "nombres": ['help'],
+      "descipción": "Muestra una lista de comandos",
+      "callback": function (comando, params) {
+        $('body').append(`<table id="tabla-comandos" class="table table-bordered table-dark table-hover">
+                            <thead>
+                              <tr>
+                                <th>Comandos</th>
+                                <th>Descripción</th>
+                              </tr>
+                            </thead>
+                            <tbody id="body-tabla-comandos">
+                            </tbody>
+                          </table>`);
+        for(let i = 0; i < comandos.length; i++){
+          let comando = comandos[i];
+          $("#body-tabla-comandos").append(`<tr>
+                                              <td>${comando.nombres.join('<br>')}</td>
+                                              <td>${comando.descipción}</td>
+                                            </tr>`);
+        }
+      }
+    },
+    {
       "nombres": ['buscacarta', 'bc'],
+      "descipción": "Redirige a la página de una carta de sif o sifas",
       "callback": function (comando, params) {
         let id = params[0];
         let sifas = false;
@@ -71,6 +96,7 @@
     },
     {
       "nombres": ['rae', 'define'],
+      "descipción": "Busca una palabra en la rae",
       "callback": function (comando, params) {
         let url = `https://dle.rae.es/${combinar(params)}`;
         redirigir(url);
@@ -78,6 +104,7 @@
     },
     {
       "nombres": ['mwiki', 'minecraft'],
+      "descipción": "Busca algo en la wiki de minecraft",
       "callback": function (comando, params) {
         if(params[0] == 'wiki') params.shift();
         let url = `https://minecraft.fandom.com/wiki/${combinar(params,'_')}`;
@@ -86,6 +113,7 @@
     },
     {
       "nombres": ['wordle', 'nerdle'],
+      "descipción": "Redirige a wordle o nerdle",
       "callback": function (comando, params) {
         let url;
         if(comando == 'nerdle') 
@@ -99,6 +127,7 @@
     },
     {
       "nombres": ['redeem'],
+      "descipción": "Redirige a la pagina para canjear codigos de genshin",
       "callback": function (comando, params) {
         let url = `https://genshin.hoyoverse.com/en/gift`;
         redirigir(url);
@@ -106,6 +135,7 @@
     },
     {
       "nombres": ['rol','equinox','calculadora'],
+      "descipción": "Redirige a la calculadora de disparos de equinox",
       "callback": function (comando, params) {
         let url = `https://stackimpostor.github.io/calculadora-equinox/`;
         redirigir(url);
@@ -121,6 +151,7 @@
     },
     {
       "nombres": ['bing'],
+      "descipción": "Busca algo en bing",
       "callback": function (comando, params) {
         let url = `https://bing.com/`;
         if(params.length > 0){
